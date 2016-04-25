@@ -4,17 +4,18 @@ var bodyParser = require('body-parser')
 var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/redux-debug');
+var cors = require('cors')
 
 var app = express()
-
 app.use(morgan('dev'))
+app.options('*', cors());
 
 app.use(function(req,res,next){
 	req.db = db;
 	next();
 });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10mb'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/log', function (req, res, next){
@@ -59,4 +60,5 @@ app.use(function(req, res, next){
 	res.sendStatus(404)
 })
 
+var PORT = 8000
 app.listen(PORT, function () {"listening on " + PORT})
