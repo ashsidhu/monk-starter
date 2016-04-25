@@ -32,16 +32,27 @@ app.post('/log', function (req, res, next){
     // Submit to the DB
     var promise = collection.insert(log)
 
-    promise.on('error', function(err){console.log(err);res.sendStatus(500)});
-	promise.on('success', function(doc){res.json(doc)});
+    promise.on('error', function(err){
+    	console.log(err);
+    	res.sendStatus(500)
+    });
+	promise.on('success', function(doc){
+		res.json(doc)
+	});
 })
 
 app.get('/log/:id', function (req, res, next){
 	var id = req.params.id
 
 	var promise = req.db.get('logs').findById(id)
-    promise.on('error', function(err){console.log(err);res.sendStatus(500)});
-	promise.on('success', function(doc){if (!doc) return res.sendStatus(404);res.json(doc)});
+    promise.on('error', function(err){
+    	console.log(err);
+    	res.sendStatus(500)
+    });
+	promise.on('success', function(doc){
+		if (!doc) return res.sendStatus(404);
+		res.json(doc)
+	});
 })
 
 app.use(function(req, res, next){
